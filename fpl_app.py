@@ -28,8 +28,8 @@ positionList = list(elements_df.element_type)
 eventpointsList = list(elements_df.event_points)
 current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
 
-
-testGraph2 = pd.read_csv('https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/testGraph.csv?token=AQBPKDFZZNI623L46MN4WFLAQIQ3Y').set_index('player name')
+url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/testGraph.csv?token=AQBPKDFZZNI623L46MN4WFLAQIQ3Y'
+testGraph2 = pd.read_csv(url,index_col=0).set_index('player name')
 testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
 
