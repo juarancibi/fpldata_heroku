@@ -56,7 +56,7 @@ testGraph3['Total Points'] =  testGraph3.sum(axis=1)
 
 url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'
 lstseasongraph = pd.read_csv(url3, index_col=0)
-lastseasonpoints = list(lstseasongraph2.iloc[:,0])
+lastseasonpoints = list(lstseasongraph.iloc[:,0])
 
 testGraph3.insert(loc=0, column='team', value=teamList)
 testGraph3.insert(loc=1, column='position', value=positionList)
