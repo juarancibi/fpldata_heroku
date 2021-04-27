@@ -50,7 +50,7 @@ testGraph2 = pd.read_csv(url2,index_col=0)
 testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
 
-slider_1, slider_2 = st.sidebar.slider("gameweeks", 1, current_gw,(1, current_gw))
+slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))
 testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]
 testGraph3['Total Points'] =  testGraph3.sum(axis=1)
 
