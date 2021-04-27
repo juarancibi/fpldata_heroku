@@ -16,6 +16,7 @@ st.write("""
 # Fantasy Premier League Data Exploration
          
 Check players' points in each gameweek, using the FantasyPL API.
+More info about the [game](https://fantasy.premierleague.com/)
 
          """)
          
