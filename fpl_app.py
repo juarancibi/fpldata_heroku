@@ -65,10 +65,10 @@ testGraph3['team'] = testGraph3['team'].replace([i for i in teams_df.id],[i for 
 testGraph3['position'] = testGraph3['position'].replace([i for i in elements_types_df.id],[i for i in elements_types_df.singular_name])
 
 sorted_unique_team = sorted(testGraph3.team.unique())
-selected_team = st.multiselect('Team', sorted_unique_team, sorted_unique_team)
+selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)
 
 unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
-selected_pos = st.multiselect('Position', unique_pos, unique_pos)
+selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 
 df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]
 final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)
