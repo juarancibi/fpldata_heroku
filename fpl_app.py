@@ -22,7 +22,7 @@ Check players' points in each gameweek, using the FantasyPL API.
 st.markdown("""
             
 * **Python libraries:** pandas, streamlit, base64
-* **Data sources: ** Endpoints: [Bootstrap-static](https://fantasy.premierleague.com/api/bootstrap-static/),
+* **Data sources: ** endpoints are [Bootstrap-static](https://fantasy.premierleague.com/api/bootstrap-static/),
                     [Element-id (each player has an id)](https://fantasy.premierleague.com/api/element-summary/{element_id}/)
 * **Github: ** [Github repository](https://github.com/juarancibi/fpldata_heroku)
             """)
