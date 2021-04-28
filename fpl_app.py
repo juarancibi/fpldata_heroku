@@ -66,7 +66,6 @@ lastseasonpoints = list(lstseasongraph.iloc[:,0])
 testGraph3.insert(loc=0, column='team', value=teamList)
 testGraph3.insert(loc=1, column='position', value=positionList)
 testGraph3['points last season'] = lastseasonpoints
-testGraph3.insert(loc=2, column='points_last_season', value=lastseasonpoints)
 testGraph3['team'] = testGraph3['team'].replace([i for i in teams_df.id],[i for i in teams_df.name])
 testGraph3['position'] = testGraph3['position'].replace([i for i in elements_types_df.id],[i for i in elements_types_df.singular_name])
 
