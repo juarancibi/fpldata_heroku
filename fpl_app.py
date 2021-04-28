@@ -50,7 +50,7 @@ current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
 
 st.write('The current gameweek is Gameweek ' + str(current_gw))
 
-url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/testGraph.csv'
+url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'
 testGraph2 = pd.read_csv(url2,index_col=0)
 testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
