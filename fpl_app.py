@@ -102,7 +102,7 @@ testGraph3['position'] = testGraph3['position'].replace([i for i in elements_typ
 df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN
 final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)                                                 ## DATAFRAME FINAL, ENTREGA TABLA CON JUGADORES CON MAS PUNTAJE ARRIBA                                                                                                        
 
-st.dataframe(final_df)                                                                             ## SHOWS FINAL DATAFRAME IN PAGE
+st.dataframe(final_df)                                                                             ## MUESTRA EL DATAFRAME FINAL EN LA PÁGINA
 
 
 ### DESCARGA EN CSV ###
