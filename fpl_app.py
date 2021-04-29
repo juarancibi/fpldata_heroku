@@ -12,6 +12,8 @@ import base64
 import requests
 from io import BytesIO
 
+## TITULO Y CUERPO DE LA PÁGINA ###
+
 st.write("""
 # Fantasy Premier League Data Exploration
 
@@ -32,75 +34,83 @@ st.markdown("""
 * **Github: ** [Github repository](https://github.com/juarancibi/fpldata_heroku)
             """)
 
-url = 'https://fantasy.premierleague.com/api/bootstrap-static/'
-r = requests.get(url)
-json = r.json()
+
+
+url = 'https://fantasy.premierleague.com/api/bootstrap-static/'                                    ## ENDPOINT DE DONDE SACO LA INFO RELEVANTE
+r = requests.get(url)                                                            
+json = r.json()                                                                  
 json.keys()
+
+
+### DATAFRAMES RELEVANTES ###
+
 events_df = pd.DataFrame(json['events'])
 elements_df = pd.DataFrame(json['elements'])
 elements_df = elements_df[['id','web_name','team','element_type','selected_by_percent','now_cost','minutes',
-                                'transfers_in','value_season','total_points','event_points']]
+                                'transfers_in','value_season','total_points','event_points']]                      
 teams_df = pd.DataFrame(json['teams'])
 elements_types_df = pd.DataFrame(json['element_types'])
+
+
+### TRANSFORMAR A LISTAS COLUMNAS IMPORTANTES DE LOS DATAFRAMES ###
 
 teamList = list(elements_df.team)
 positionList = list(elements_df.element_type)
 eventpointsList = list(elements_df.event_points)
+
+
+### DEVUELVE EL GAMEWEEK (FECHA) EN LA QUE SE ENCUENTRA LA PREMIER ###
+
 current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
+st.write('The current gameweek is Gameweek ' + str(current_gw))                                    ## MUESTRA EN LA PÁGINA LA FECHA ACTUAL DE LA PREMIER                                   
 
-st.write('The current gameweek is Gameweek ' + str(current_gw))
 
-url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'
+### LEE EL ARCHIVO CON LOS PUNTOS POR GAMEWEEK ###
+
+url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA CREADA POR OTRO ARCHIVO PYTHON
 testGraph2 = pd.read_csv(url2,index_col=0)
 testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
 
-slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))
-testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]
-testGraph3['Total Points'] =  testGraph3.sum(axis=1)
 
-url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'
-lstseasongraph = pd.read_csv(url3, index_col=0)
-lastseasonpoints = list(lstseasongraph.iloc[:,0])
+### CREAR SLIDERS Y MULTISELECTS EN LA PÁGINA PARA SELECCIONAR GAMEWEEKS, EQUIPOS, POSICIONES ###
 
-testGraph3.insert(loc=0, column='team', value=teamList)
-testGraph3.insert(loc=1, column='position', value=positionList)
-testGraph3['points last season'] = lastseasonpoints
-testGraph3['team'] = testGraph3['team'].replace([i for i in teams_df.id],[i for i in teams_df.name])
-testGraph3['position'] = testGraph3['position'].replace([i for i in elements_types_df.id],[i for i in elements_types_df.singular_name])
+slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 sorted_unique_team = sorted(testGraph3.team.unique())
-selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)
+selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)             ## SELECCIONA TODOS LOS EQUIPOS EN ORDEN ALFABÉTICO
 
 unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
-selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
+selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)                          ## SELECCIONA TODOS LAS POSICIONES
 
-df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]
-final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)
 
-st.dataframe(final_df)
+### ÚLTIMOS ARREGLOS PARA EL DATAFRAME FINAL ###
 
-def filedownload(df):
+testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
+testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
+
+url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'           ## URL DEL ARCHIVO EN GITHUB CON LOS PUNTOS SACADOS EN LA TEMPORADA PASADA
+lstseasongraph = pd.read_csv(url3, index_col=0)                                                    
+lastseasonpoints = list(lstseasongraph.iloc[:,0])                                                  ## GENERA LISTA CON LOS PUNTOS DE CADA JUGADOR TEMPORADA PASADA
+
+testGraph3.insert(loc=0, column='team', value=teamList)                                            ## INSERTA LISTA CON LOS EQUIPOS DE CADA JUGADOR
+testGraph3.insert(loc=1, column='position', value=positionList)                                    ## INSERTA LISTA CON LAS POSICIONES DE CADA JUGADOR
+testGraph3['points last season'] = lastseasonpoints                                                ## INSERTA LISTA CON LOS PUNTOS DE CADA JUGADOR LA TEMPORADA PASADA
+testGraph3['team'] = testGraph3['team'].replace([i for i in teams_df.id],[i for i in teams_df.name])                                            # REEMPLAZA CÓDIGO NUMÉRICO DE CADA EQUIPO POR EL NOMBRE REAL (EJ: ARSENAL = 1, ASTON VILLA = 2, etc)
+testGraph3['position'] = testGraph3['position'].replace([i for i in elements_types_df.id],[i for i in elements_types_df.singular_name])         # REEMPLAZA CÓDIGO NUMÉRICO DE CADA POSICIÓN CON EL NOMBRE        
+
+df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN
+final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)                                                 ## DATAFRAME FINAL, ENTREGA TABLA CON JUGADOR CON MAS PUNTAJE ARRIBA                                                                                                        
+
+st.dataframe(final_df)                                                                             ## SHOWS FINAL DATAFRAME IN PAGE
+
+
+### DESCARGA EN CSV ###
+
+def filedownload(df):                                                   
     csv = df.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="playerpoints.csv">Download CSV File</a>'
     return href
-
-def to_excel(df):
-    output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, sheet_name='Sheet1')
-    writer.save()
-    processed_data = output.getvalue()
-    return processed_data
-
-def get_table_download_link(df):
-    """Generates a link allowing the data in a given panda dataframe to be downloaded
-    in:  dataframe
-    out: href string
-    """
-    val = to_excel(df)
-    b64 = base64.b64encode(val)  # val looks like b'...'
-    return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="playerpoints.xlsx">Download Excel File</a>' # decode b'abc' => abc
 
 st.markdown(filedownload(final_df), unsafe_allow_html=True)
