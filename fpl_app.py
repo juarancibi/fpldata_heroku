@@ -73,6 +73,12 @@ testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
 
 
+### ARREGLOS PARA EL DATAFRAME FINAL ###
+
+testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
+testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
+
+
 ### CREAR SLIDERS Y MULTISELECTS EN LA PÁGINA PARA SELECCIONAR GAMEWEEKS, EQUIPOS, POSICIONES ###
 
 slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
@@ -83,11 +89,7 @@ selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique
 unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
 selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)                          ## SELECCIONA TODOS LAS POSICIONES
 
-
 ### ÚLTIMOS ARREGLOS PARA EL DATAFRAME FINAL ###
-
-testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
-testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
 
 url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'           ## URL DEL ARCHIVO EN GITHUB CON LOS PUNTOS SACADOS EN LA TEMPORADA PASADA
 lstseasongraph = pd.read_csv(url3, index_col=0)                                                    
