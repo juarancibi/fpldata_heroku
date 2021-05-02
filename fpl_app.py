@@ -75,18 +75,11 @@ testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
 
 ### ARREGLOS PARA EL DATAFRAME FINAL CON SLIDERS Y MULTISELECTS ###
 
+##SLIDER##
 slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
 testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
-
-sorted_unique_team = sorted(testGraph3.team.unique())
-selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)             ## SELECCIONA TODOS LOS EQUIPOS EN ORDEN ALFABÉTICO
-
-unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
-selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)                          ## SELECCIONA TODOS LAS POSICIONES
-
-### ÚLTIMOS ARREGLOS PARA EL DATAFRAME FINAL ###
 
 url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'           ## URL DEL ARCHIVO EN GITHUB CON LOS PUNTOS SACADOS EN LA TEMPORADA PASADA
 lstseasongraph = pd.read_csv(url3, index_col=0)                                                    
@@ -97,6 +90,14 @@ testGraph3.insert(loc=1, column='position', value=positionList)                 
 testGraph3['points last season'] = lastseasonpoints                                                ## INSERTA LISTA CON LOS PUNTOS DE CADA JUGADOR LA TEMPORADA PASADA
 testGraph3['team'] = testGraph3['team'].replace([i for i in teams_df.id],[i for i in teams_df.name])                                            # REEMPLAZA CÓDIGO NUMÉRICO DE CADA EQUIPO POR EL NOMBRE REAL (EJ: ARSENAL = 1, ASTON VILLA = 2, etc)
 testGraph3['position'] = testGraph3['position'].replace([i for i in elements_types_df.id],[i for i in elements_types_df.singular_name])         # REEMPLAZA CÓDIGO NUMÉRICO DE CADA POSICIÓN CON EL NOMBRE        
+
+##MULTISELECT##
+sorted_unique_team = sorted(testGraph3.team.unique())
+selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)             ## SELECCIONA TODOS LOS EQUIPOS EN ORDEN ALFABÉTICO
+
+##MULTISELECT##
+unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
+selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)                          ## SELECCIONA TODOS LAS POSICIONES
 
 df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN
 final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)                                                 ## DATAFRAME FINAL, ENTREGA TABLA CON JUGADORES CON MAS PUNTAJE ARRIBA                                                                                                        
