@@ -73,15 +73,12 @@ testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
 
 
-### ARREGLOS PARA EL DATAFRAME FINAL ###
+### ARREGLOS PARA EL DATAFRAME FINAL CON SLIDERS Y MULTISELECTS ###
+
+slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
 testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
-
-
-### CREAR SLIDERS Y MULTISELECTS EN LA PÁGINA PARA SELECCIONAR GAMEWEEKS, EQUIPOS, POSICIONES ###
-
-slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 sorted_unique_team = sorted(testGraph3.team.unique())
 selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)             ## SELECCIONA TODOS LOS EQUIPOS EN ORDEN ALFABÉTICO
