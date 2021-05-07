@@ -112,7 +112,7 @@ st.dataframe(final_df)                                                          
 ### DESCARGA EN CSV ###
 
 def filedownload(df):                                                   
-    csv = df.to_csv(index=False)
+    csv = df.to_csv(index=True)
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="playerpoints.csv">Download CSV File</a>'
     return href
