@@ -2,4 +2,4 @@
 Files used for data visualization of Fantasy Premier League Data
 
 
-pointsbygw.csv updated every gameweek
+'pointsbygw.csv' updated every gameweek
