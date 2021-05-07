@@ -63,7 +63,8 @@ eventpointsList = list(elements_df.event_points)
 
 current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
 st.write('The current gameweek is Gameweek ' + str(current_gw))                                    ## MUESTRA EN LA PÁGINA LA FECHA ACTUAL DE LA PREMIER                                   
-
+next_gw = events_df.deadline_time[events_df['is_next'] == True].tolist()[0]
+st.write('Next Gameweek starts in ' + str(next_gw))
 
 ### LEE EL ARCHIVO CON LOS PUNTOS POR GAMEWEEK ###
 
