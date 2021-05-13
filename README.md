@@ -1,5 +1,8 @@
 # fpldata_heroku
-Files used for data visualization of Fantasy Premier League Data
+Archivos utilizados para la visualizacion de datos de la API de Fantasy Premier League
 
 
-'pointsbygw.csv' updated every gameweek
+'pointsbygw.csv' actualizado todos los gameweeks
+
+
+https://fpl-streamlit.herokuapp.com/
