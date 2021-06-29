@@ -60,27 +60,29 @@ positionList = list(elements_df.element_type)
 eventpointsList = list(elements_df.event_points)
 
 
-### DEVUELVE EL GAMEWEEK (FECHA) EN LA QUE SE ENCUENTRA LA PREMIER ###
+### DEVUELVE EL GAMEWEEK (FECHA) EN LA QUE SE ENCUENTRA LA PREMIER (POR AHORA CERRADA) ###
 
-current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
-st.write('The current gameweek is Gameweek ' + str(current_gw))                                    ## MUESTRA EN LA PÁGINA LA FECHA ACTUAL DE LA PREMIER                                   
+##################current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
+##################st.write('The current gameweek is Gameweek ' + str(current_gw))                                    ## MUESTRA EN LA PÁGINA LA FECHA ACTUAL DE LA PREMIER                                   
 #next_gw = events_df.name[events_df['is_next'] == True].tolist()[0]
 #next_gw_time = events_df.deadline_time[events_df['is_next'] == True].tolist()[0]
 #output_date = datetime.datetime.strptime(next_gw_time, "%Y-%m-%dT%H:%M:%SZ")
 #st.write(str(next_gw) + ' starts ' + str(output_date.strftime("%Y-%m-%d")) + ' at ' + str(output_date.strftime("%H:%M:%S")) + ' UTC')
+
+st.write('FPL 20/21 is closed, FPL 21/22 starts August 13') 
 
 ### LEE EL ARCHIVO CON LOS PUNTOS POR GAMEWEEK ###
 
 url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA CREADA POR OTRO ARCHIVO PYTHON
 testGraph2 = pd.read_csv(url2,index_col=0)
 testGraph2.drop(['id','team','position'], axis=1, inplace=True)
-testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)
+### testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)                                   ## NO NECESARIO ACTUALIZAR, YA TERMINÓ
 
 
 ### ARREGLOS PARA EL DATAFRAME FINAL CON SLIDERS Y MULTISELECTS ###
 
 ##SLIDER##
-slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, current_gw,(1, current_gw))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
+slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, 38,(1, 38))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
 testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
