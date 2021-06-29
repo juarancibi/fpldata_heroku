@@ -20,6 +20,8 @@ st.write("""
 
 
 For Premier League 2020 - 2021.
+
+
 Check players' points in each gameweek, using data from the FantasyPL API.
 
 
@@ -69,7 +71,7 @@ eventpointsList = list(elements_df.event_points)
 #output_date = datetime.datetime.strptime(next_gw_time, "%Y-%m-%dT%H:%M:%SZ")
 #st.write(str(next_gw) + ' starts ' + str(output_date.strftime("%Y-%m-%d")) + ' at ' + str(output_date.strftime("%H:%M:%S")) + ' UTC')
 
-st.write('FPL 20/21 is closed, FPL 21/22 starts August 13') 
+st.write('FPL 20/21 is closed, FPL 21/22 starts August 13.') 
 
 ### LEE EL ARCHIVO CON LOS PUNTOS POR GAMEWEEK ###
 
