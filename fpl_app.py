@@ -67,10 +67,9 @@ selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique
 unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
 selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)                          ## SELECCIONA TODOS LAS POSICIONES
 
-df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN
-final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)                                                 ## DATAFRAME FINAL, ENTREGA TABLA CON JUGADORES CON MAS PUNTAJE ARRIBA                                                                                                        
+df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN                                                                                                      
 
-st.dataframe(final_df)                                                                             ## MUESTRA EL DATAFRAME FINAL EN LA PÁGINA
+st.dataframe(testGraph3)                                                                             ## MUESTRA EL DATAFRAME FINAL EN LA PÁGINA
 
 
 ### DESCARGA EN CSV ###
