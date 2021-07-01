@@ -44,60 +44,20 @@ r = requests.get(url)
 json = r.json()                                                                  
 json.keys()
 
-
-### DATAFRAMES RELEVANTES ###
-
-events_df = pd.DataFrame(json['events'])
-elements_df = pd.DataFrame(json['elements'])
-elements_df = elements_df[['id','web_name','team','element_type','selected_by_percent','now_cost','minutes',
-                                'transfers_in','value_season','total_points','event_points']]                      
-teams_df = pd.DataFrame(json['teams'])
-elements_types_df = pd.DataFrame(json['element_types'])
-
-
-### TRANSFORMAR A LISTAS COLUMNAS IMPORTANTES DE LOS DATAFRAMES ###
-
-teamList = list(elements_df.team)
-positionList = list(elements_df.element_type)
-eventpointsList = list(elements_df.event_points)
-
-
-### DEVUELVE EL GAMEWEEK (FECHA) EN LA QUE SE ENCUENTRA LA PREMIER (POR AHORA CERRADA) ###
-
-##################current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
-##################st.write('The current gameweek is Gameweek ' + str(current_gw))                                    ## MUESTRA EN LA PÁGINA LA FECHA ACTUAL DE LA PREMIER                                   
-#next_gw = events_df.name[events_df['is_next'] == True].tolist()[0]
-#next_gw_time = events_df.deadline_time[events_df['is_next'] == True].tolist()[0]
-#output_date = datetime.datetime.strptime(next_gw_time, "%Y-%m-%dT%H:%M:%SZ")
-#st.write(str(next_gw) + ' starts ' + str(output_date.strftime("%Y-%m-%d")) + ' at ' + str(output_date.strftime("%H:%M:%S")) + ' UTC')
-
 st.write('FPL 20/21 is closed, FPL 21/22 starts August 13.') 
-
-### LEE EL ARCHIVO CON LOS PUNTOS POR GAMEWEEK ###
 
 url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA CREADA POR OTRO ARCHIVO PYTHON
 testGraph2 = pd.read_csv(url2,index_col=0)
-testGraph2.drop(['id','team','position'], axis=1, inplace=True)
-### testGraph2['GW'+' '+str(current_gw)] = list(eventpointsList)                                   ## NO NECESARIO ACTUALIZAR, YA TERMINÓ
-
-
-### ARREGLOS PARA EL DATAFRAME FINAL CON SLIDERS Y MULTISELECTS ###
 
 ##SLIDER##
 slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, 38,(1, 38))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
-testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
+#testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
 
 url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'           ## URL DEL ARCHIVO EN GITHUB CON LOS PUNTOS SACADOS EN LA TEMPORADA PASADA
 lstseasongraph = pd.read_csv(url3, index_col=0)                                                    
 lastseasonpoints = list(lstseasongraph.iloc[:,0])                                                  ## GENERA LISTA CON LOS PUNTOS DE CADA JUGADOR TEMPORADA PASADA
-
-testGraph3.insert(loc=0, column='team', value=teamList)                                            ## INSERTA LISTA CON LOS EQUIPOS DE CADA JUGADOR
-testGraph3.insert(loc=1, column='position', value=positionList)                                    ## INSERTA LISTA CON LAS POSICIONES DE CADA JUGADOR
-testGraph3['points last season'] = lastseasonpoints                                                ## INSERTA LISTA CON LOS PUNTOS DE CADA JUGADOR LA TEMPORADA PASADA
-testGraph3['team'] = testGraph3['team'].replace([i for i in teams_df.id],[i for i in teams_df.name])                                            # REEMPLAZA CÓDIGO NUMÉRICO DE CADA EQUIPO POR EL NOMBRE REAL (EJ: ARSENAL = 1, ASTON VILLA = 2, etc)
-testGraph3['position'] = testGraph3['position'].replace([i for i in elements_types_df.id],[i for i in elements_types_df.singular_name])         # REEMPLAZA CÓDIGO NUMÉRICO DE CADA POSICIÓN CON EL NOMBRE        
 
 ##MULTISELECT##
 sorted_unique_team = sorted(testGraph3.team.unique())
