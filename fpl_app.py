@@ -47,18 +47,6 @@ r = requests.get(url)
 json = r.json()                                                                  
 json.keys()
 
-st.header("""
-
-FPL 20/21 is closed, FPL 21/22 starts August 13.
-
-
-
-
-
-
-   
-""") 
-
 url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA CREADA POR OTRO ARCHIVO PYTHON
 testGraph2 = pd.read_csv(url2,index_col=0)
 testGraph2.drop(['id','team','position'], axis=1, inplace=True)
@@ -88,6 +76,9 @@ selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)       
 df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN                                                                                                      
 final_df = df_selected_team.sort_values(by=['Total Points'], ascending=False)
 
+
+st.header('FPL 20/21 is closed, FPL 21/22 starts August 13')
+st.write('Data Dimension: ' + str(final_df.shape[0]) + ' rows and ' + str(final_df.shape[1]) + ' columns.')
 st.dataframe(final_df)                                                                             ## MUESTRA EL DATAFRAME FINAL EN LA PÁGINA
 
 
