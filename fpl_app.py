@@ -48,16 +48,21 @@ st.write('FPL 20/21 is closed, FPL 21/22 starts August 13.')
 
 url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA CREADA POR OTRO ARCHIVO PYTHON
 testGraph2 = pd.read_csv(url2,index_col=0)
+testGraph2.drop(['id','team','position'], axis=1, inplace=True)
 
 ##SLIDER##
 slider_1, slider_2 = st.sidebar.slider("Gameweek", 1, 38,(1, 38))                  ## SELECCIONA TODOS LOS GAMEWEEKS ACTUALES POR DEFECTO
 
 testGraph3 = testGraph2.iloc[:, slider_1-1:slider_2]                                               ## GENERA DATAFRAME CON LOS GAMEWEEKS SELECCIONADOS EN LA PÁGINA
-#testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
+testGraph3['Total Points'] =  testGraph3.sum(axis=1)                                               ## SUMA TODOS LOS GAMEWEEKS Y GENERA LA COLUMNA 'TOTAL POINTS'
 
 url3 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/lastseason.csv'           ## URL DEL ARCHIVO EN GITHUB CON LOS PUNTOS SACADOS EN LA TEMPORADA PASADA
 lstseasongraph = pd.read_csv(url3, index_col=0)                                                    
 lastseasonpoints = list(lstseasongraph.iloc[:,0])                                                  ## GENERA LISTA CON LOS PUNTOS DE CADA JUGADOR TEMPORADA PASADA
+
+testGraph3.insert(loc=0, column='team', value=list(pd.read_csv(url2, index_col=0).team))                                            ## INSERTA LISTA CON LOS EQUIPOS DE CADA JUGADOR
+testGraph3.insert(loc=1, column='position', value=list(pd.read_csv(url2, index_col=0).position))                                    ## INSERTA LISTA CON LAS POSICIONES DE CADA JUGADOR
+testGraph3['points last season'] = lastseasonpoints                                                ## INSERTA LISTA CON LOS PUNTOS DE CADA JUGADOR LA TEMPORADA PASADA
 
 ##MULTISELECT##
 sorted_unique_team = sorted(testGraph3.team.unique())
@@ -80,4 +85,4 @@ def filedownload(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="playerpoints.csv">Download CSV File</a>'
     return href
 
-st.markdown(filedownload(final_df), unsafe_allow_html=True)
+st.markdown(filedownload(testGraph3), unsafe_allow_html=True)
