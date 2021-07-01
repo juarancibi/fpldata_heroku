@@ -35,6 +35,8 @@ st.markdown("""
 * **Data sources: ** endpoints are [bootstrap-static](https://fantasy.premierleague.com/api/bootstrap-static/),
                     [element-id (each player has an id)](https://fantasy.premierleague.com/api/element-summary/{element_id}/)
 * **Github: ** [Github repository](https://github.com/juarancibi/fpldata_heroku)
+
+
             """)
 
 
@@ -44,7 +46,7 @@ r = requests.get(url)
 json = r.json()                                                                  
 json.keys()
 
-st.write('FPL 20/21 is closed, FPL 21/22 starts August 13.') 
+st.header('FPL 20/21 is closed, FPL 21/22 starts August 13.') 
 
 url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA CREADA POR OTRO ARCHIVO PYTHON
 testGraph2 = pd.read_csv(url2,index_col=0)
@@ -73,6 +75,7 @@ unique_pos = ['Goalkeeper','Defender','Midfielder','Forward']
 selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)                          ## SELECCIONA TODOS LAS POSICIONES
 
 df_selected_team = testGraph3[(testGraph3.team.isin(selected_team)) & (testGraph3.position.isin(selected_pos))]               ## CREO UN DATAFRAME QUE FILTRA TABLA CON RESPECTO AL INPUT EN LA PAGINA DE EQUIPOS Y POSICIONES QUE SE SELECCIONEN                                                                                                      
+test_graph3 = df_selected_team.sort_values(by=['Total Points'], ascending=False)
 
 st.dataframe(testGraph3)                                                                             ## MUESTRA EL DATAFRAME FINAL EN LA PÁGINA
 
