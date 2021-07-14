@@ -3,6 +3,8 @@ Archivos utilizados para la visualizacion de datos de la API de Fantasy Premier 
 
 
 'pointsbygw.csv' actualizado todos los gameweeks, usando fpl_data.py
+
+
 'lastseason.csv' usando fpl_lastseason.py
 
 
