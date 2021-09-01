@@ -66,12 +66,16 @@ def load_data(year):
             r = requests.get(url)
             json = r.json()
             json_history_df = pd.DataFrame(json['history'])
-            json_history_df = json_history_df.groupby(['round'], as_index=False)['total_points'].sum()
-            json_history_df.set_index("round")
-            new_index = pd.Index(range(1,current_gw+1), name="round")
-            json_history_df = json_history_df.set_index("round").reindex(new_index)
-            points = list(json_history_df.total_points)
-            pointsArray.append(points)      
+            if json_history_df.empty == False:
+                  json_history_df = json_history_df.groupby(['round'], as_index=False)['total_points'].sum()
+                  json_history_df.set_index("round")
+                  new_index = pd.Index(range(1,current_gw+1), name="round")
+                  json_history_df = json_history_df.set_index("round").reindex(new_index)
+                  points = list(json_history_df.total_points)
+                  pointsArray.append(points)
+            else:
+                  points = current_gw * [0]
+                  pointsArray.append(points)
         playerpoints = pd.DataFrame(data=pointsArray, index=nameList, columns=gwList)
     return playerpoints
 
