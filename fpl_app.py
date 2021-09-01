@@ -7,6 +7,7 @@ Created on Tue Aug 24 11:31:17 2021
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 import base64
 import requests
 
@@ -74,7 +75,7 @@ def load_data(year):
                   points = list(json_history_df.total_points)
                   pointsArray.append(points)
             else:
-                  points = current_gw * [0]
+                  points = current_gw * [np.nan]
                   pointsArray.append(points)
         playerpoints = pd.DataFrame(data=pointsArray, index=nameList, columns=gwList)
     return playerpoints
