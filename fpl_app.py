@@ -22,9 +22,9 @@ More info about the [game](https://fantasy.premierleague.com/).
 st.markdown("""
             
 * **Python libraries:** pandas, streamlit, base64
-* **Data sources: ** endpoints are [bootstrap-static](https://fantasy.premierleague.com/api/bootstrap-static/),
+* **Data sources:** endpoints are [bootstrap-static](https://fantasy.premierleague.com/api/bootstrap-static/),
                     [element-id (each player has an id)](https://fantasy.premierleague.com/api/element-summary/{element_id}/)
-* **Github: ** [Github repository](https://github.com/juarancibi/fpldata_heroku)
+* **Github:** [Github repository](https://github.com/juarancibi/fpldata_heroku)
             """)
 
 
@@ -52,7 +52,7 @@ positionList = list(elements_df.element_type)
 
 current_gw = events_df.id[events_df['is_current'] == True].tolist()[0]
 
-@st.cache
+@st.cache_data
 def load_data(year):
     
     if year == 2020:
