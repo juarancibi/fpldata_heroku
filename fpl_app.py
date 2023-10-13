@@ -30,7 +30,7 @@ st.markdown("""
 
 
 st.sidebar.header('Filters')
-selected_year = st.sidebar.selectbox('Year', [2020,2022])
+selected_year = st.sidebar.selectbox('Year', [2020,2023])
 
 url = 'https://fantasy.premierleague.com/api/bootstrap-static/'
 url2 = 'https://raw.githubusercontent.com/juarancibi/fpldata_heroku/main/pointsbygw.csv'           ## URL DEL ARCHIVO EN GITHUB, TABLA DEL 2020 CREADA POR OTRO ARCHIVO PYTHON
